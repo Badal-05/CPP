@@ -7,61 +7,52 @@ int max(int a, int b)
     return (a>b?a:b);
 }
 
-int crossSum(int a[],int lower,int mid, int higher)
+int crossSum(int a[],int high , int mid, int low)
 {
-    // calculating the left sum 
-    int s=0;
-    int left = INT16_MIN;
-    for(int i = mid; i>=lower;i--)
+    int left = INT8_MIN; int s = 0;
+    for(int i = mid ; i >= low; i--)
     {
-        s+=a[i];
-        if(s>left){
+        s += a[i];
+        if(s>left)
+        {
             left = s;
         }
     }
-
-    //calculating the right sum
     s=0;
-    int right = INT16_MIN;
-    for(int i = mid+1; i<=higher ;i++)
+    int right = INT8_MIN ;
+    for(int i  = mid+1 ; i <= high ; i++)
     {
-        s+=a[i];
-        if(s>right){
+        s+= a[i];
+        if(s > right)
+        {
             right = s;
         }
     }
-
-    return(left+right);
+    return left+right;
 }
 
-int maxSum(int a[],int lower, int higher)
+int maxSum(int a[], int low, int high)
 {
-    if(lower == higher){
-        return a[lower];
+    
+    if(low==high)
+    {
+        return a[low];
     }
-    // calculate mid to partision the main array into two parts.
-    int mid=(lower+higher)/2;
-    int temp = max(maxSum(a,lower,mid),maxSum(a,mid+1,higher));
-    //maxSum(a,lower,mid) is the left subarray
-    //maxSum(a,mid+1,higher) is the right subarray
-    return(max(crossSum(a,lower,mid,higher),temp));
-    // we will return the biggest out of :
-    //LeftSum (maxSum of left subarray) 
-    //RightSum (maxSum of right subarray)
-    //CrossSum
+    int mid = (low + high)/2;
+    int temp = max(maxSum(a,low,mid),maxSum(a,mid+1,high));
+    return max(crossSum(a,high,mid,low),temp);
 }
 
-int main(){
+int main()
+{
     int n;
-    printf("Enter the number of elements you want in the main array\n");
+    cout<<"Enter the number of elements in the array: ";
     cin>>n;
-    int a[n];
-    printf("Enter the elements of the main array\n");
-    for(int i = 0; i<n; i++)
+    int arr[n];
+    for(int i=0 ; i<n ; i++)
     {
-        cin>>a[i];
+        cout<<"Enter the number: ";
+	    cin>>arr[i];
     }
-    int size = (sizeof(a)/sizeof(int)); // or simply use 'n'
-    cout<<"The Maximum sum which can be achieved in this array is "<<maxSum(a,0,size-1)<<endl;
-    // since sizeof returns size in bytes, we divide it by size of int(ie, 4) to get the size of the array
+    cout<<"The Maximum subarray sum is: "<<maxSum(arr,0,n-1);
 }
